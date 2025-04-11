@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:52:42 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/10 11:57:24 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/11 16:06:29 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,19 @@ typedef struct s_cmd
 	struct s_cmd *next;
 }	t_cmd;
 
+// Structure for the execution phase
+
+typedef struct  s_exec
+{
+	char	**args;	// ["ls" , "-l" , NULL]
+	char	*infile; // for '< input.txt'
+	char	*outfile;	// for '> output.txt' or '>>'
+	int		append;	// 0 for '>' , 1 for '>>'
+	int 	heredoc; // 1 if it's a herdoc
+	char	*delimiter;
+	char	*cmd; // original command name 
+}	t_exec;
+
 
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 char	**ft_split(char *input);
@@ -77,5 +90,7 @@ int	is_pipe_at_start(char *input);
 void	free_token(t_token *tokens);
 
 t_cmd	*prepare_commands(char *input, t_env *env);
+void	free_cmd_list(t_cmd *cmd);
+t_exec	**build_exec_list(char *input, t_env *env);
 
 #endif
