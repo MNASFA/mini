@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:52:42 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/11 16:06:29 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/12 10:59:27 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ typedef enum e_token_type
 	REDIR_IN, // "<"
 	REDIR_OUT, // ">"
 	HEREDOC, // "<<"
-	APPEND // ">>"
+	APPEND ,// ">>"
+	REDIR_INOUT // <>
 }	t_token_type;
 
 typedef struct s_token
@@ -87,10 +88,15 @@ int		check_redirection_err(t_token *tokens);
 char *handle_pipe_end(char *input);
 int	is_pipe_at_start(char *input);
 
-void	free_token(t_token *tokens);
 
 t_cmd	*prepare_commands(char *input, t_env *env);
-void	free_cmd_list(t_cmd *cmd);
 t_exec	**build_exec_list(char *input, t_env *env);
+
+
+// Free functions :
+
+void	free_token(t_token *tokens);
+void	free_exec_array(t_exec **execs);
+void	free_cmd_list(t_cmd *cmd);
 
 #endif

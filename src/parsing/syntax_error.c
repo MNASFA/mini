@@ -6,26 +6,11 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 11:20:40 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/11 10:09:39 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/12 11:13:42 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-void	free_token(t_token *tokens)
-{
-	t_token	*temp;
-
-	while (tokens)
-	{
-		temp = tokens->next;
-
-		if (tokens->value)
-			free(tokens->value);
-		free(tokens);
-		tokens = temp;
-	}
-}
 
 int track_quotes(char *input)
 {
@@ -85,7 +70,8 @@ int check_redirection_err(t_token *tokens)
 {
 	while (tokens)
 	{
-		if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT || tokens->type == HEREDOC || tokens->type == APPEND)
+		if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT || tokens->type == HEREDOC 
+			|| tokens->type == APPEND || tokens->type == REDIR_INOUT)
 		{
 			if (!tokens->next || tokens->next->type != WORD)
 			{
@@ -98,6 +84,7 @@ int check_redirection_err(t_token *tokens)
 			if (tokens->next && (tokens->next->type == REDIR_IN || tokens->next->type == REDIR_OUT 
 								|| tokens->next->type == HEREDOC || tokens->next->type == APPEND))
 			{
+				printf("here\n");
 				printf("minishell: syntax error near unexpected token `%s'\n", tokens->next->value);
 				return (1);
 			}

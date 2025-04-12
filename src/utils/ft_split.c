@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 11:42:25 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/10 10:50:03 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/12 11:11:27 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int word_len(char *str)
 	}
 	else if (is_special_char(str[i]))
     {
+		if (str[i] == '<' && str[i + 1] == '>')
+			return 2;
 		if ((str[i] == '<' || str[i] == '>') && str[i + 1] == str[i])
 			return 2;
 		return 1;
@@ -69,8 +71,14 @@ int count_words(char *input)
 
 void free_tokens(char **tokens, int count)
 {
-	for (int i = 0; i < count; i++)
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
 		free(tokens[i]);
+		i++;
+	}
 	free(tokens);
 }
 

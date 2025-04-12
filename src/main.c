@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:04:14 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/11 17:22:22 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/12 10:00:39 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,55 +60,6 @@ void	print_exec_list(t_exec **execs)
 			printf("	heredoc	: << %s\n", execs[i]->delimiter);
 		i++;
 	}
-}
-
-void	free_cmd_list(t_cmd *cmd)
-{
-	t_cmd	*tmp;
-	while (cmd)
-	{
-		free_token(cmd->token);
-		tmp = cmd;
-		cmd = cmd->next;
-		free(tmp);
-	}
-}
-
-void free_exec_array(t_exec **execs)
-{
-	int i = 0;
-	int j;
-
-	if (!execs)
-		return;
-
-	while (execs[i])
-	{
-		// Free args array
-		if (execs[i]->args)
-		{
-			j = 0;
-			while (execs[i]->args[j])
-			{
-				free(execs[i]->args[j]);
-				j++;
-			}
-			free(execs[i]->args);
-		}
-
-		// Free other members
-		if (execs[i]->infile)
-			free(execs[i]->infile);
-		if (execs[i]->outfile)
-			free(execs[i]->outfile);
-		if (execs[i]->delimiter)
-			free(execs[i]->delimiter);
-
-		// Free the struct itself
-		free(execs[i]);
-		i++;
-	}
-	free(execs);
 }
 
 int main(int ac, char **av, char **envp)

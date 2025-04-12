@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 11:44:14 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/11 17:13:16 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/12 11:29:11 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int count_args(t_token *tokens)
 	{
 		if (current->type == WORD)
 		{
-			if (!prev || (prev->type != REDIR_IN && prev->type != REDIR_OUT && prev->type != APPEND && prev->type != HEREDOC))
+			if (!prev || (prev->type != REDIR_IN && prev->type != REDIR_OUT && prev->type != APPEND && prev->type != HEREDOC && prev->type != REDIR_INOUT))
 				count++;
 		}
 		prev = current;
@@ -63,7 +63,7 @@ t_exec	*parse_command(t_cmd *cmd)
 
 		if(current->type == WORD)
 		{
-			if (!prev || (prev->type != REDIR_IN && prev->type != REDIR_OUT && prev->type != APPEND && prev->type != HEREDOC))
+			if (!prev || (prev->type != REDIR_IN && prev->type != REDIR_OUT && prev->type != APPEND && prev->type != HEREDOC && prev->type != REDIR_INOUT))
 			{
 				exec->args[i++] = ft_strdup(current->value);
 				if (!exec->cmd)
@@ -81,6 +81,11 @@ t_exec	*parse_command(t_cmd *cmd)
 		{
 			exec->outfile = ft_strdup(current->next->value);
 			exec->append = 1;
+		}
+		else if (current->type == REDIR_INOUT && current->next)
+		{
+			exec->infile = ft_strdup(current->next->value);
+			exec->outfile = ft_strdup(current->next->value);
 		}
 		else if (current->type == HEREDOC && current->next)
 		{

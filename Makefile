@@ -4,7 +4,8 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 HEADER = minishell.h
-SRCS = src/main.c src/utils/ft_split.c src/utils/utils.c src/parsing/tokenizer.c src/parsing/expand.c src/parsing/commands.c src/parsing/syntax_error.c src/parsing/prepare_commands.c
+SRCS = src/main.c src/utils/ft_split.c src/utils/utils.c src/parsing/tokenizer.c src/parsing/expand.c \
+		src/parsing/commands.c src/parsing/syntax_error.c src/parsing/prepare_commands.c src/parsing/free_utils.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
