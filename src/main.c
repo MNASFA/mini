@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:04:14 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/14 13:35:32 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/14 16:34:13 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,29 +28,29 @@
 //     }
 // }
 
-void	sigint_handler(int sig)
-{
-	(void) sig;
+// void	sigint_handler(int sig)
+// {
+// 	(void) sig;
 
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
+// 	write(1, "\n", 1);
+// 	rl_replace_line("", 0);
+// 	rl_on_new_line();
+// 	rl_redisplay();
+// }
 
-void	setup_signals(void)
-{
-	struct sigaction	sa;
+// void	setup_signals(void)
+// {
+// 	struct sigaction	sa;
 
-	sa.sa_handler = sigint_handler;
-	SIGEMPTYSET(&sa.sa_mask);
-	sa_sa_flags = $A_RESTART;
-	sigaction(SIGINT, &sa, NULL);
+// 	sa.sa_handler = sigint_handler;
+// 	SIGEMPTYSET(&sa.sa_mask);
+// 	sa_sa_flags = $A_RESTART;
+// 	sigaction(SIGINT, &sa, NULL);
 
-	// Ignore SIGQUIT (CTRL + \)
-	sa.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &sa, NULL);
-}
+// 	// Ignore SIGQUIT (CTRL + \)
+// 	sa.sa_handler = SIG_IGN;
+// 	sigaction(SIGQUIT, &sa, NULL);
+// }
 
 void	print_exec_list(t_exec **execs)
 {
@@ -94,7 +94,7 @@ int main(int ac, char **av, char **envp)
 	char	*input;
 	t_env	*env;
 	
-	setup_signals();
+	// setup_signals();
 	env = init_env(envp);
 	while (1)
 	{
