@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 11:44:14 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/12 11:29:11 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/14 11:33:14 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ t_exec	*parse_command(t_cmd *cmd)
 
 	while (current)
 	{
-
 		if(current->type == WORD)
 		{
 			if (!prev || (prev->type != REDIR_IN && prev->type != REDIR_OUT && prev->type != APPEND && prev->type != HEREDOC && prev->type != REDIR_INOUT))
@@ -111,9 +110,6 @@ t_cmd	*prepare_commands(char *input, t_env *env)
 		printf("minishell: syntax error near unexpected token '|'\n");
 		return (NULL);
 	}
-	input = handle_pipe_end(input);
-	if (!input)
-		return (NULL);
 	
 	input = check_unclosed_quotes(input);
 	if (!input)
@@ -122,8 +118,12 @@ t_cmd	*prepare_commands(char *input, t_env *env)
 	tokens = tokenizer(input);
 	if (!tokens)
 		return (NULL);
-
+	
 	if (check_redirection_err(tokens) == 1)
+		return (NULL);
+	
+	input = handle_pipe_end(input);
+	if (!input)
 		return (NULL);
 	
 	// Expand environment variables
@@ -132,7 +132,7 @@ t_cmd	*prepare_commands(char *input, t_env *env)
 	{
 		if (current->type == WORD)
 		{
-			expanded_value = expand_variables(current->value, env);
+			expanded_value = expand_variables(current->value, env, 0, 0, 0, 0);
 			if (expanded_value)
 			{
 				free(current->value);

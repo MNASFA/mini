@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 11:20:40 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/12 11:13:42 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:48:32 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,14 @@ int track_quotes(char *input)
 char	*check_unclosed_quotes(char *input)
 {
 	int track;
-	char *joined_input;
-	char *newinput;
 
 	track = track_quotes(input);
-	while(track != 0)
+	if (track != 0)
 	{
-		newinput = readline("> ");
-		if (!newinput)
-		{
-			printf("\nminishell: unexpected EOF while looking for matching quote\n");
-			free(input);
-			return (NULL);
-		}
-		joined_input = ft_strjoin(input, "\n");
-		free(input);
-		input = ft_strjoin(joined_input, newinput);
-		free(joined_input);
-		free(newinput);
-		track = track_quotes(input);
+		printf("minishell: syntax error unclosed quotes\n");
+		return (NULL);
 	}
-	return(input);
+	return (input);
 }
 
 int check_redirection_err(t_token *tokens)
@@ -84,7 +71,6 @@ int check_redirection_err(t_token *tokens)
 			if (tokens->next && (tokens->next->type == REDIR_IN || tokens->next->type == REDIR_OUT 
 								|| tokens->next->type == HEREDOC || tokens->next->type == APPEND))
 			{
-				printf("here\n");
 				printf("minishell: syntax error near unexpected token `%s'\n", tokens->next->value);
 				return (1);
 			}

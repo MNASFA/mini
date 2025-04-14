@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:04:14 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/12 10:00:39 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:51:17 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 //         current = current->next;
 //     }
 // }
+
+
 
 void	print_exec_list(t_exec **execs)
 {
@@ -69,7 +71,7 @@ int main(int ac, char **av, char **envp)
 
 	char	*input;
 	t_env	*env;
-
+	
 	env = init_env(envp);
 	while (1)
 	{

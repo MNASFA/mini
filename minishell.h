@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:52:42 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/12 10:59:27 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/14 11:33:08 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,14 @@ t_token	*tokenizer(char *input);
 t_token *create_token(char *content);
 t_env	*init_env(char **envp);
 
-char	*expand_variables(char	*str, t_env *env);
+char	*expand_variables(char *str, t_env *env, int i, int j, int in_single, int in_double);
 t_cmd	*split_by_pipe(t_token *tokens);
 void	remove_pipe_node(t_cmd	*cmd_list);
 char	*check_unclosed_quotes(char *input);
-int check_two_pipes(char *input);
+int		check_two_pipes(char *input);
 int		check_redirection_err(t_token *tokens);
-char *handle_pipe_end(char *input);
-int	is_pipe_at_start(char *input);
+char	*handle_pipe_end(char *input);
+int		is_pipe_at_start(char *input);
 
 
 t_cmd	*prepare_commands(char *input, t_env *env);
