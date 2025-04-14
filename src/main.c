@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:04:14 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/12 19:51:17 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/14 13:35:32 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@
 //         current = current->next;
 //     }
 // }
-
-
 
 void	print_exec_list(t_exec **execs)
 {

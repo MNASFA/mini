@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:23:31 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/14 11:32:59 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/14 13:57:58 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,11 @@ char *expand_variables(char *str, t_env *env, int i, int j, int in_single, int i
 	while (str[i])
 	{
 		quotes_state(str[i], &in_single, &in_double);
+		if ((str[i] == '\'' && !in_double) || (str[i] == '\"' && !in_single))
+		{
+			i++; // skip this quote
+			continue;
+		}
 		if (str[i] == '$' && !in_single)
 		{
 			dollar_count = count_dollars(str, i);
