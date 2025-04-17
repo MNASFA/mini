@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:05:47 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/12 11:05:57 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/16 16:28:09 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ t_token_type get_token_type(char *token)
 		return (HEREDOC);
 	if (!ft_strcmp(token, ">>"))
 		return (APPEND);
-	if (!ft_strcmp(token, "<>")) // i added now
-		return (REDIR_INOUT); 
+	// if (!ft_strcmp(token, "<>")) // i added now
+	// 	return (REDIR_INOUT); 
 	return (WORD);
 }
 

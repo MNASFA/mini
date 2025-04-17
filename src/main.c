@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:04:14 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/14 16:34:13 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/17 10:00:35 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,37 +52,43 @@
 // 	sigaction(SIGQUIT, &sa, NULL);
 // }
 
-void	print_exec_list(t_exec **execs)
+void	print_exec_list(t_exec *execs)
 {
 	int i = 0;
 	
 	if (!execs)
 		return;
 	
-	while (execs[i])
+	t_exec	*current = execs;
+
+	while (current)
 	{
 		printf("Command %d:\n", i + 1);
 		
-		printf("	cmd	: %s\n", execs[i]->cmd);
+		printf("	cmd	: %s\n", current->cmd);
 		
 		printf("	args 	: ");
 		int j = 0;
-		while (execs[i]->args && execs[i]->args[j])
+		if (current->args[j])
 		{
-			printf("%s ", execs[i]->args[j]);
-			j++;
+			while (current->args[j])
+			{
+				printf("%s ", current->args[j]);
+				j++;
+			}
 		}
+		
 		printf("\n");
 
-		if (execs[i]->infile)
-			printf("	infile : %s\n", execs[i]->infile);
+		if (current->infile)
+			printf("	infile : %s\n", current->infile);
 		
-		if (execs[i]->outfile)
-			printf("	outfile	: %s (append: %d)\n", execs[i]->outfile , execs[i]->append);
+		if (current->outfile)
+			printf("	outfile	: %s (append: %d)\n", current->outfile , current->append);
 		
-		if (execs[i]->heredoc)
-			printf("	heredoc	: << %s\n", execs[i]->delimiter);
-		i++;
+		if (current->heredoc)
+			printf("	heredoc	: << %s\n", current->delimiter);
+		current = current->next;
 	}
 }
 
@@ -108,10 +114,10 @@ int main(int ac, char **av, char **envp)
 		if (*input)
 			add_history(input);
 
-		t_exec **execs = build_exec_list(input, env);
+		t_exec *execs = build_exec_list(input, env);
 		print_exec_list(execs);
 		
-		free_exec_array(execs);
+		free_exec_list(execs);
 		free(input);
 	}
 	return (0);

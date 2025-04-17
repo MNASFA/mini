@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 11:20:40 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/12 19:48:32 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/16 17:00:24 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int check_redirection_err(t_token *tokens)
 	while (tokens)
 	{
 		if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT || tokens->type == HEREDOC 
-			|| tokens->type == APPEND || tokens->type == REDIR_INOUT)
+			|| tokens->type == APPEND)
 		{
 			if (!tokens->next || tokens->next->type != WORD)
 			{

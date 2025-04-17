@@ -6,11 +6,26 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:58:22 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/12 10:48:35 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/17 09:47:35 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+void	free_split(char	**split)
+{
+	int i;
+	
+	if (!split)
+		return;
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
 
 void	free_token(t_token *tokens)
 {
@@ -39,38 +54,23 @@ void	free_cmd_list(t_cmd *cmd)
 	}
 }
 
-void free_exec_array(t_exec **execs)
+void	free_exec_list(t_exec *exec_list)
 {
-	int i = 0;
-	int j;
+	t_exec	*current;
+	t_exec	*next;
 
-	if (!execs)
-		return;
-
-	while (execs[i])
+	current = exec_list;
+	while (current)
 	{
-		// Free args array
-		if (execs[i]->args)
-		{
-			j = 0;
-			while (execs[i]->args[j])
-			{
-				free(execs[i]->args[j]);
-				j++;
-			}
-			free(execs[i]->args);
-		}
-		// Free other members
-		if (execs[i]->infile)
-			free(execs[i]->infile);
-		if (execs[i]->outfile)
-			free(execs[i]->outfile);
-		if (execs[i]->delimiter)
-			free(execs[i]->delimiter);
+		next = current->next;
+		if (current->args)
+			free_split(current->args);
+		free(current->infile);
+		free(current->outfile);
+		free(current->delimiter);
+		free(current->cmd);
 
-		// Free the struct itself
-		free(execs[i]);
-		i++;
+		free(current);
+		current = next;
 	}
-	free(execs);
 }

@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:23:31 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/14 13:57:58 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/16 10:29:23 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_env	*create_env_var(char *env_start)
 	
 	equal = ft_strchr(env_start, '=');
 	if (!equal)
-		return (NULL);	
+		return (NULL);
 	
 	new_var = malloc(sizeof(t_env));
 	if (!new_var)

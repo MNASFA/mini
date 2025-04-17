@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 15:01:07 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/02/28 14:28:28 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/15 17:03:34 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,4 +161,39 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	ft_joined(new_str, s1, s2);
 	return (new_str);
+}
+
+
+int	check_sign(char str, int sign)
+{
+	if (str == '-')
+		sign = -1;
+	return (sign);
+}
+
+int	ft_atoi(const char *str)
+{
+	int			i;
+	int			sign;
+	long		res;
+	long		temp;
+
+	i = 0;
+	sign = 1;
+	res = 0;
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+		sign = check_sign (str[i++], sign);
+	while (str[i] >= 48 && str[i] <= 57)
+	{
+		temp = res;
+		res = res * 10 + (sign * (str[i] - 48));
+		if ((res / 10) != temp && sign == 1)
+			return (-1);
+		else if ((res / 10) != temp && sign == -1)
+			return (0);
+		i++;
+	}
+	return (res);
 }

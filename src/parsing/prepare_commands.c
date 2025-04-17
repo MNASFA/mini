@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 11:44:14 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/14 11:33:14 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/17 13:20:12 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ int count_args(t_token *tokens)
 	int count;
 	t_token	*current;
 	t_token	*prev;
+	int		cmd_found;
 	
+	cmd_found = 0;
 	count = 0;
 	current = tokens;
 	prev = NULL;
@@ -26,8 +28,14 @@ int count_args(t_token *tokens)
 	{
 		if (current->type == WORD)
 		{
-			if (!prev || (prev->type != REDIR_IN && prev->type != REDIR_OUT && prev->type != APPEND && prev->type != HEREDOC && prev->type != REDIR_INOUT))
-				count++;
+			if (!prev || (prev->type != REDIR_IN && prev->type != REDIR_OUT 
+				&& prev->type != APPEND && prev->type != HEREDOC))
+			{
+				if (!cmd_found)
+					cmd_found = 1;
+				else
+					count++;		
+			}
 		}
 		prev = current;
 		current = current->next;
@@ -35,21 +43,14 @@ int count_args(t_token *tokens)
 	return (count);
 }
 
-t_exec	*parse_command(t_cmd *cmd)
+static t_exec *init_exec(int arg_count)
 {
 	t_exec *exec;
-	t_token	*current;
-	t_token	*prev;
-	int		i;
-	int		arg_count;
-
+	
 	exec = malloc(sizeof(t_exec));
-	current = cmd->token;
-	prev = NULL;
-	i = 0;
-	arg_count = count_args(current);
-
-
+	if (!exec)
+		return (NULL);
+	
 	exec->args = malloc(sizeof(char *) * (arg_count + 1));
 	exec->infile = NULL;
 	exec->outfile = NULL;
@@ -58,39 +59,68 @@ t_exec	*parse_command(t_cmd *cmd)
 	exec->delimiter = NULL;
 	exec->cmd = NULL;
 
+	return (exec);
+}
+
+static void	handle_redirections(t_exec *exec, t_token *current)
+{
+	if (current->type == REDIR_IN && current->next)
+		exec->infile = ft_strdup(current->next->value);
+	else if (current->type == REDIR_OUT && current->next)
+	{
+		exec->outfile = ft_strdup(current->next->value);
+		exec->append = 0;
+	}
+	else if	(current->type == APPEND && current->next)
+	{
+		exec->outfile = ft_strdup(current->next->value);
+		exec->append = 1;
+	}
+	else if (current->type == HEREDOC && current->next)
+	{
+		exec->delimiter = ft_strdup(current->next->value);
+		exec->heredoc = 1;
+	}
+}
+
+static void	handle_word(t_exec *exec, t_token *current, t_token *prev
+	, int *i, int *cmd_found)
+{
+	if (!prev || (prev->type != REDIR_IN && prev->type != REDIR_OUT && prev->type != APPEND 
+		&& prev->type != HEREDOC))
+	{
+		if (!(*cmd_found))
+		{
+			exec->cmd = ft_strdup(current->value);
+			*cmd_found = 1;
+		}
+		else
+		{
+			exec->args[*i] = ft_strdup(current->value);
+			(*i)++;
+		}
+	}
+}
+
+t_exec	*parse_command(t_cmd *cmd, int i, int cmd_found)
+{
+	t_exec *exec;
+	t_token	*current;
+	t_token	*prev;
+	int		arg_count;
+
+	current = cmd->token;
+	prev = NULL;
+	arg_count = count_args(current);
+	exec = init_exec(arg_count);
+	if (!exec)
+		return (NULL);
 	while (current)
 	{
 		if(current->type == WORD)
-		{
-			if (!prev || (prev->type != REDIR_IN && prev->type != REDIR_OUT && prev->type != APPEND && prev->type != HEREDOC && prev->type != REDIR_INOUT))
-			{
-				exec->args[i++] = ft_strdup(current->value);
-				if (!exec->cmd)
-					exec->cmd = exec->args[0];
-			}
-		}
-		else if (current->type == REDIR_IN && current->next)
-			exec->infile = ft_strdup(current->next->value);
-		else if (current->type == REDIR_OUT && current->next)
-		{
-			exec->outfile = ft_strdup(current->next->value);
-			exec->append = 0;
-		}
-		else if	(current->type == APPEND && current->next)
-		{
-			exec->outfile = ft_strdup(current->next->value);
-			exec->append = 1;
-		}
-		else if (current->type == REDIR_INOUT && current->next)
-		{
-			exec->infile = ft_strdup(current->next->value);
-			exec->outfile = ft_strdup(current->next->value);
-		}
-		else if (current->type == HEREDOC && current->next)
-		{
-			exec->delimiter = ft_strdup(current->next->value);
-			exec->heredoc = 1;
-		}
+			handle_word(exec, current, prev, &i, &cmd_found);
+		else
+			handle_redirections(exec, current);
 		prev = current;
 		current = current->next;
 	}
@@ -148,44 +178,46 @@ t_cmd	*prepare_commands(char *input, t_env *env)
 	free_token(tokens);
 	return(cmds);
 }
-t_exec	**build_exec_list(char *input, t_env *env)
+t_exec	*build_exec_list(char *input, t_env *env)
 {
 	t_cmd	*cmds;
 	t_cmd	*tmp;
-	t_exec	**exec_list;
-	int		count;
-	int 	i;
+	t_exec	*exec_list;
+	t_exec	*current;
+	t_exec	*new_node; // TEMPORARY POINTER FOR NEW NODES
 	
+	current = NULL;
+	exec_list = NULL;
+	new_node = NULL;
 	cmds = prepare_commands(input, env);
-	tmp = cmds;
-	count = 0;
-	i = 0;
-	
 	if (!cmds)
 		return (NULL);
+	
+	tmp = cmds;
 	while (tmp)
 	{
-		count++;
+		//Create a new t_exec node
+		new_node = parse_command(tmp, 0, 0);
+		if (!new_node)
+		{
+			free_cmd_list(cmds);
+			free_exec_list(exec_list);
+			return (NULL);
+		}
+
+		// Link the new node to the list
+		if (!exec_list)
+		{
+			exec_list = new_node;
+			current = exec_list;
+		}
+		else
+		{
+			current->next = new_node;
+			current = new_node;
+		}
 		tmp = tmp->next;
 	}
-	
-	exec_list = malloc(sizeof(t_exec *) * (count + 1));
-	if (!exec_list)
-	{
-		free_cmd_list(cmds);
-		return (NULL);
-	}
-	
-	// Parse each cmd !!
-	tmp = cmds; 
-    i = 0;
-	while (tmp)
-	{
-		exec_list[i++] = parse_command(tmp);
-		tmp = tmp->next;
-	}
-	exec_list[i] = NULL;
-	
 	free_cmd_list(cmds);
 	return (exec_list);
 }
