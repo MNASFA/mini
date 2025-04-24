@@ -80,8 +80,8 @@ void	print_exec_list(t_exec *execs)
 		
 		printf("\n");
 		
-		t_redir *out = execs->outfiles;
-		t_redir	*in = execs->infiles;
+		t_redir *out = current->outfiles;
+		t_redir	*in = current->infiles;
 		while (in)
 		{
 			printf("	infiles: %s \n", in->filename);
