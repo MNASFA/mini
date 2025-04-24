@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:52:42 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/17 09:52:47 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/23 18:17:02 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,28 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
+
+typedef	struct s_redir
+{
+	char			*filename;
+	int				append;
+	struct s_redir	*next;
+}	t_redir;
+
 // Structure for the execution phase
 
 typedef struct  s_exec
 {
 	char			**args;	// ["ls" , "-l" , NULL]
-	char			*infile; // for '< input.txt'
-	char			*outfile;	// for '> output.txt' or '>>'
+	t_redir			*infiles; // for '< input.txt'
+	t_redir			*outfiles;	// for '> output.txt' or '>>'
 	int				append;	// 0 for '>' , 1 for '>>'
 	int				heredoc; // 1 if it's a herdoc
 	char			*delimiter;
-	char			*cmd; // original command name 
+	char			*cmd; // original command name
 	struct s_exec	*next;
 }	t_exec;
+
 
 
 void	*ft_memcpy(void *dest, const void *src, size_t n);
@@ -100,5 +109,6 @@ t_exec	*build_exec_list(char *input, t_env *env);
 void	free_token(t_token *tokens);
 void	free_cmd_list(t_cmd *cmd);
 void	free_exec_list(t_exec *exec_list);
+void	free_env_list(t_env *env);
 
 #endif

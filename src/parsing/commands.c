@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 21:56:54 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/09 11:26:04 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/24 09:32:27 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,6 @@ t_cmd	*split_by_pipe(t_token *tokens)
 	}
 	return (cmd_list);
 }
+
+
 

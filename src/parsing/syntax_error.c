@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 11:20:40 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/16 17:00:24 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/23 19:36:30 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,8 @@ int	is_pipe_at_start(char *input)
 
 char *handle_pipe_end(char *input)
 {
-	int check;
-	char *str;
+	int		check;
+	char	*str;
 
 	check = is_end(input);
 	while(!check)

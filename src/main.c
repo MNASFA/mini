@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:04:14 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/17 10:00:35 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/23 19:52:50 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ void	print_exec_list(t_exec *execs)
 		return;
 	
 	t_exec	*current = execs;
-
+	
 	while (current)
 	{
-		printf("Command %d:\n", i + 1);
+		printf("Command %d:\n", ++i);
 		
 		printf("	cmd	: %s\n", current->cmd);
 		
@@ -79,12 +79,21 @@ void	print_exec_list(t_exec *execs)
 		}
 		
 		printf("\n");
-
-		if (current->infile)
-			printf("	infile : %s\n", current->infile);
 		
-		if (current->outfile)
-			printf("	outfile	: %s (append: %d)\n", current->outfile , current->append);
+		t_redir *out = execs->outfiles;
+		t_redir	*in = execs->infiles;
+		while (in)
+		{
+			printf("	infiles: %s \n", in->filename);
+			in = in->next;
+		}
+		
+		
+		while (out)
+		{
+			printf("	outfile: %s (append: %d)\n", out->filename, out->append);
+			out = out->next;
+		}
 		
 		if (current->heredoc)
 			printf("	heredoc	: << %s\n", current->delimiter);

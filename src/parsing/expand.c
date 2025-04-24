@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:23:31 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/16 10:29:23 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/23 19:30:59 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ t_env	*init_env(char **envp)
 	while (envp[i])
 	{
 		new_var = create_env_var(envp[i]);
+		if (!new_var)
+		{
+			free_env_list(head);
+			return (NULL);
+		}
 		if (!head)
 			head = new_var;
 		else 
@@ -53,7 +58,7 @@ t_env	*init_env(char **envp)
 		current = new_var;
 		i++;
 	}
-	return (head);
+	return (head); 
 }
 
 char	*get_env_value(t_env *env, char *key)

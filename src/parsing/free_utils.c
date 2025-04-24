@@ -6,7 +6,7 @@
 /*   By: hmnasfa <hmnasfa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:58:22 by hmnasfa           #+#    #+#             */
-/*   Updated: 2025/04/17 09:47:35 by hmnasfa          ###   ########.fr       */
+/*   Updated: 2025/04/23 17:32:55 by hmnasfa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,15 @@ void	free_split(char	**split)
 	free(split);
 }
 
-void	free_token(t_token *tokens)
+void	free_token(t_token *token)
 {
-	t_token	*temp;
-
-	while (tokens)
+	t_token *next;
+	while (token)
 	{
-		temp = tokens->next;
-
-		if (tokens->value)
-			free(tokens->value);
-		free(tokens);
-		tokens = temp;
+		next = token->next;
+		free(token->value);
+		free(token);
+		token = next;
 	}
 }
 
@@ -54,6 +51,32 @@ void	free_cmd_list(t_cmd *cmd)
 	}
 }
 
+void	free_redir_list(t_redir *out_in)
+{
+	t_redir *tmp;
+	
+	while (out_in)
+	{
+		tmp = out_in->next;
+		free(out_in->filename);
+		free(out_in);
+		out_in = tmp;
+	}
+}
+
+void	free_env_list(t_env *env)
+{
+	t_env *tmp;
+	while (env)
+	{
+		tmp = env->next;
+		free(env->key);
+		free(env->value);
+		free(env);
+		env = tmp;
+	}
+}
+
 void	free_exec_list(t_exec *exec_list)
 {
 	t_exec	*current;
@@ -65,11 +88,9 @@ void	free_exec_list(t_exec *exec_list)
 		next = current->next;
 		if (current->args)
 			free_split(current->args);
-		free(current->infile);
-		free(current->outfile);
 		free(current->delimiter);
-		free(current->cmd);
-
+		free_redir_list(current->infiles);
+		free_redir_list(current->outfiles);
 		free(current);
 		current = next;
 	}
